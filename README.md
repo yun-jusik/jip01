@@ -228,10 +228,10 @@ Private Repository - All Rights Reserved
 
 ## 👨‍💻 개발자
 
-- **윤정식 (Yun Jusik)**
+- **윤주식 (Yun Jusik)**
 - 임장연구소 운영
-- 730회 이상 임장 경험
-- YouTube, Instagram, TikTok 운영
+- 789회 이상 임장 경험 (2018.05.25 ~ 현재)
+- YouTube, Instagram 등 운영
 
 ---
 

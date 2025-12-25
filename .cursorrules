@@ -1,0 +1,426 @@
+# 집결정(Jip01) - AI Code Generation Rules
+
+## 🎯 앱 핵심 정체성
+- 프로젝트명: jip01 (집결정 - House Decision)
+- 목적: 30대 여성 직장인의 "판단의 외로움" 해소
+- 타겟: 6개월 내 이사 예정자, 부동산 초보
+- 핵심 가치: GPS 기반 유튜브 임장 가이드 (Hands-free)
+- 핵심 미디어: YouTube 링크 (MP3 파일 사용 금지)
+
+## 🚫 절대 원칙 (NEVER VIOLATE)
+
+### 원칙 1: 설명하지 마라, 느끼게 하라
+```typescript
+// ❌ BAD: 설명이 필요한 UI
+<Text>이 앱은 GPS 기반으로 위치를 인식하여...</Text>
+
+// ✅ GOOD: 즉각 가치 전달
+<BigButton>지금 여기서 임장 시작하기</BigButton>
+<SmallText>켜놓고 걸으면 전문가가 속삭여요</SmallText>
+```
+
+**코드 작성 시**:
+- 모든 UI 텍스트는 15초 안에 이해 가능해야 함
+- "이 기능은...", "사용법은..." 같은 설명 금지
+- 상태 변화 명확: "막막함" → "안심"
+
+### 원칙 2: 판단을 요구하지 마라, 안심시켜라
+```typescript
+// ❌ BAD: 사용자에게 선택 요구
+<Select>
+  <Option>초급 코스</Option>
+  <Option>중급 코스</Option>
+</Select>
+
+// ✅ GOOD: 확신 제공
+<AutoDetectedMessage>
+  지금 계신 곳은 성수동이에요.
+  5분 코스 자동으로 시작할게요.
+</AutoDetectedMessage>
+```
+
+**코드 작성 시**:
+- 선택지 제공 금지 (자동 감지 우선)
+- "이게 맞나?" 불안 유발 UI 금지
+- "이래서 괜찮아" 안심 메시지 필수
+
+### 원칙 3: 흐름을 깨지 마라, 유지하라
+```typescript
+// ❌ BAD: 중간에 팝업, 알림, 선택 요구
+if (videoPlaying) {
+  showPopup("로그인하시겠어요?"); // 흐름 차단!
+}
+
+// ✅ GOOD: 흐름 유지
+if (videoPlaying) {
+  // 아무것도 하지 않음
+  // 완료 후에만 다음 제안
+}
+```
+
+**코드 작성 시**:
+- 영상/오디오 재생 중 방해 금지
+- 로딩, 광고, 팝업 최소화
+- 한 번에 한 가지만 (Single Task)
+
+## 🎨 디자인 시스템
+
+### 색상 (3개만!)
+```dart
+// 기존 a01에서 가져온 브랜드 컬러
+static const primary = Color(0xFF1BA896);    // 청록색 - 메인
+static const accent = Color(0xFFE5675A);     // 주황-빨강 - 강조/경고
+static const background = Color(0xFFF8F9FA); // 밝은 회색 - 배경
+
+// ❌ BAD: 20개 색상 변형 (기존 a01 실수)
+// ✅ GOOD: 3개만 사용
+```
+
+### 폰트
+```dart
+fontFamily: 'GmarketSans'  // 기존 a01에서 가져옴
+
+// 크기 (5개만!)
+hero: 28px      // 큰 버튼
+title: 20px     // 제목
+body: 16px      // 본문
+small: 12px     // 부가 정보
+
+// ❌ BAD: 13가지 텍스트 스타일 (기존 a01 실수)
+// ✅ GOOD: 5개만 사용
+```
+
+### 간격
+```dart
+static const spacingS = 8.0;
+static const spacingM = 12.0;
+static const spacingL = 16.0;
+static const spacingXL = 20.0;
+```
+
+### 라운드 코너
+```dart
+static const radiusM = 12.0;
+static const radiusL = 16.0;
+```
+
+## 🏗️ 코드 아키텍처
+
+### 파일 구조 (GetX 사용 금지!)
+```
+lib/
+├── main.dart
+├── models/
+│   └── course.dart           # 코스 데이터 모델
+├── services/
+│   ├── course_service.dart   # 코스 자동 로드
+│   ├── gps_service.dart      # GPS
+│   └── youtube_service.dart  # YouTube 재생
+├── screens/
+│   ├── home_screen.dart      # 홈 (버튼 1개)
+│   └── youtube_player_screen.dart  # 플레이어
+└── theme/
+    └── app_theme.dart        # 심플 테마
+```
+
+**금지 사항**:
+```
+❌ GetX 사용 금지
+   - bindings/ 폴더 금지
+   - controllers/ 폴더 금지
+   - Get.to(), Get.find() 금지
+   - 이유: 복잡도 증가 (기존 a01 실수)
+
+✅ Flutter 기본 기능만 사용
+   - Navigator.push()
+   - setState()
+   - 필요시 Provider (나중에)
+```
+
+### 함수 네이밍
+```dart
+// ❌ BAD: 기술 중심
+function playVideo() {}
+function getUserLocation() {}
+
+// ✅ GOOD: 사용자 상태 중심
+function startImjangGuidance() {}
+function detectCurrentNeighborhood() {}
+function provideReassurance() {}  // 안심 제공
+```
+
+## 📦 코스 모듈화 & 자동화
+
+### 코스 데이터 구조 (JSON)
+```json
+{
+  "id": "seongsu",
+  "name": "성수동",
+  "description": "힙한 카페와 공장 사이",
+  
+  "location": {
+    "lat": 37.5447,
+    "lng": 127.0557,
+    "radius": 500
+  },
+  
+  "media": {
+    "type": "youtube",
+    "youtubeUrl": "https://youtube.com/watch?v=xxxxx",
+    "videoId": "xxxxx",
+    "thumbnailUrl": "https://img.youtube.com/vi/xxxxx/maxresdefault.jpg",
+    "duration": "5:00"
+  },
+  
+  "checklist": [
+    {
+      "title": "지하철역 거리",
+      "criterion": "10분 이내",
+      "result": "성수역 7분",
+      "status": "pass"
+    }
+  ],
+  
+  "difficulty": "easy",
+  "tags": ["카페", "힙한동네"]
+}
+```
+
+### 코스 추가 = 파일 추가만!
+```
+코스 1개 추가 방법:
+1. assets/courses/yeonnam.json 생성
+2. 템플릿 복사 후 내용 수정
+3. 완료!
+
+→ 코드 수정 0줄!
+→ 앱 재실행하면 자동 반영!
+```
+
+## 🎥 미디어 전략
+
+### YouTube 링크 사용 (필수!)
+```dart
+// ❌ BAD: MP3 파일 (기존 방식)
+"audioFile": "seongsu_1.mp3"
+// 문제: 앱 용량 증가, 업데이트 어려움
+
+// ✅ GOOD: YouTube 링크
+"media": {
+  "type": "youtube",
+  "youtubeUrl": "https://youtube.com/watch?v=xxxxx",
+  "videoId": "xxxxx"
+}
+// 장점: 앱 용량 최소, 즉시 업데이트, 기존 채널 활용
+```
+
+### 필요한 패키지
+```yaml
+dependencies:
+  youtube_player_flutter: ^8.1.2  # YouTube 재생
+  geolocator: ^10.1.0              # GPS
+  permission_handler: ^11.0.1      # 권한
+```
+
+## 🚨 금지 사항 (FORBIDDEN)
+```dart
+// ❌ 절대 하지 마라
+const FORBIDDEN = {
+  packages: [
+    "get",                    // GetX 금지 (복잡도 증가)
+    "get_storage",
+    "rxdart",                 // 과도한 반응형
+  ],
+  
+  features: [
+    "AR 기능",                // 복잡도 증가
+    "AI 챗봇",                // 판단 요구 (원칙 위배)
+    "퀴즈/게임",              // 주의 분산
+    "커뮤니티",               // MVP 과함
+    "소셜 로그인",            // 진입 장벽
+    "다크 모드",              // MVP 불필요
+  ],
+  
+  UI: [
+    "팝업 광고",              // 흐름 차단
+    "로딩 3초 이상",          // 이탈 유발
+    "선택지 4개 이상",        // 인지 과부하
+    "작은 글씨 (12px 미만)",
+  ],
+  
+  messaging: [
+    "전문 용어",              // 임장, 재건축 등
+    "부정적 프레이밍",        // "실패하지 않으려면"
+    "비교 유도",              // "다른 사람은 이렇게"
+  ],
+};
+```
+
+## ✅ 필수 체크리스트 (코드 작성 전)
+```typescript
+// 모든 기능 추가 전에 질문하라
+const CHECK_BEFORE_CODE = {
+  1: "이 기능이 '판단의 외로움'을 해소하는가?",
+  2: "15초 안에 가치가 느껴지는가?",
+  3: "설명 없이 사용 가능한가?",
+  4: "흐름을 깨지 않는가?",
+  5: "30대 여성이 거부감 없는가?",
+  6: "앱 용량이 증가하지 않는가?",
+  7: "복잡도가 증가하지 않는가?",
+};
+
+// NO가 하나라도 있으면 → 재설계
+```
+
+## 📱 Flutter 전용 규칙
+
+### 위젯 구조 (단순하게!)
+```dart
+// ✅ GOOD: 단순 구조
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: BigStartButton(),  // 버튼 1개
+    ),
+  );
+}
+
+// ❌ BAD: 복잡한 구조 (기존 a01 실수)
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(...),
+    drawer: Drawer(...),
+    bottomNavigationBar: BottomNav(...),
+    floatingActionButton: FAB(...),
+  );
+}
+```
+
+### 상태 관리 (최소한만)
+```dart
+// 원칙: 최소한의 상태만 관리
+class VideoPlayerState {
+  final bool isPlaying;
+  final int currentSecond;
+  final String neighborhoodName;
+  
+  // ❌ BAD: 과도한 상태 (기존 a01 실수)
+  // final List<Achievement> achievements;
+  // final Map<String, UserPreference> preferences;
+}
+```
+
+## 🎯 우선순위 (개발 순서)
+```typescript
+const DEVELOPMENT_PRIORITY = [
+  "1. 큰 버튼 1개 (지금 임장 시작)",
+  "2. GPS 자동 감지",
+  "3. YouTube 영상 자동 재생",
+  "4. 진행도 표시 (몇 %)",
+  "5. 저장 기능",
+  "---MVP 완료---",
+  "6. 3개 동네 수집 UI",
+  "7. 공유 카드 생성",
+  "8. 프리미엄 전환 플로우",
+];
+```
+
+## 💬 메시지 톤 (Tone & Manner)
+```typescript
+// ✅ GOOD: 친근한 전문가 (30대 여성의 똑똑한 언니)
+"성수동은 2015년부터 달라졌어요."
+"여기 보이는 낡은 건물들? 이게 재개발 신호예요."
+
+// ❌ BAD: 딱딱한 전문가
+"당해 지역은 2015년을 기점으로 변화하였습니다."
+
+// ❌ BAD: 과한 친근함
+"오빠, 여기 완전 대박이야~"
+```
+
+## 🔍 성능 규칙
+
+### 로딩 시간
+```typescript
+// 목표: 3초 이내 첫 화면
+// 목표: 0.5초 이내 버튼 반응
+
+// ❌ BAD: 로딩 화면 3초 이상
+showLoadingSpinner(5000);
+
+// ✅ GOOD: 즉시 반응 + 백그라운드 로딩
+showMainButton();
+loadDataInBackground();
+```
+
+### GPS 정확도 보완
+```dart
+// 원칙: GPS 오차 허용 설계 (10~30m)
+// 해결: 위치 기반 아니라 "동네" 기반
+
+// ❌ BAD: "지금 건물 앞에 서세요"
+// ✅ GOOD: "이 동네에서 체크할 3가지"
+```
+
+## 📊 테스트 규칙
+
+### 성공 지표
+```typescript
+const SUCCESS_METRICS = {
+  첫사용: {
+    "15초 내 가치 이해": ">80%",
+    "첫 버튼 클릭까지": "<3초",
+  },
+  
+  재사용: {
+    "재듣기율": ">70%",
+    "7일 내 재방문": ">50%",
+  },
+  
+  전환: {
+    "NPS (추천 의향)": ">8/10",
+    "HOC 공유 의향": ">60%",
+  },
+};
+```
+
+## 🎯 타겟 사용자 (모든 결정의 기준)
+```typescript
+interface TargetUser {
+  age: 30-39;
+  gender: "female";
+  occupation: "office_worker";
+  status: "moving_within_6_months";
+  income: "4000-7000만원";
+  realEstateProficiency: "beginner";
+  
+  emotion: {
+    current: "overwhelmed",
+    pain: "loneliness_in_decision",
+    desired: "reassured"
+  };
+  
+  behavior: {
+    평일: "출퇴근 바쁨",
+    주말: "집 보러 다님",
+    걱정: "잘못 선택할까봐"
+  };
+}
+```
+
+## 🚀 시작 명령어
+
+모든 코드 작성 시 이 파일을 참조하세요.
+AI에게: "CURSOR rules에 따라 코드 작성해줘"
+
+## 최종 검증 질문 (코드 작성 후)
+
+1. 이 코드가 "판단의 외로움"을 해소하는가?
+2. 30대 여성이 15초 안에 이해하는가?
+3. 흐름을 깨지 않는가?
+4. 복잡도가 증가하지 않는가?
+5. GetX를 사용하지 않았는가?
+6. YouTube 링크를 사용하는가? (MP3 금지)
+
+→ 모두 YES면 커밋 ✅
+→ 하나라도 NO면 재작성 ❌

@@ -230,8 +230,10 @@ Private Repository - All Rights Reserved
 
 - **윤주식 (Yun Jusik)**
 - 임장연구소 운영
-- 789회 이상 임장 경험 (2018.05.25 ~ 현재)
+- **789회 이상 임장 경험** (2018.05.25 ~ 현재)
+  - [📍 임장 기록 지도 보기](https://www.google.com/maps/d/u/0/edit?hl=ko&mid=1IFcLVWKtWarWDJ-kH1P_DfvwbeiPO4Q&ll=37.520515003409415%2C127.00594821136168&z=13)
 - YouTube, Instagram 등 운영
+
 
 ---
 

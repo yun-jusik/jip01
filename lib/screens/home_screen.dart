@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'youtube_player_screen.dart';
 
 /// 홈 화면
 ///
@@ -21,8 +22,16 @@ class HomeScreen extends StatelessWidget {
             // 큰 버튼
             ElevatedButton(
               onPressed: () {
-                // TODO: 오디오 플레이어 화면으로 이동
-                print('임장 시작 버튼 클릭!');
+                // YouTube 플레이어 화면으로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YouTubePlayerScreen(
+                      videoId: 'dQw4w9WgXcQ', // 테스트용 영상 ID
+                      locationName: '성수동',
+                    ),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,

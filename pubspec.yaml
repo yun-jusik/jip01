@@ -67,7 +67,8 @@ flutter:
 # 폰트 추가
   assets:
     - assets/fonts/
-    
+    - assets/courses/
+       
   fonts:
     - family: GmarketSans
       fonts:

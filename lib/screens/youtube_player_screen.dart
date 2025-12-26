@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../theme/app_theme.dart';
+import '../models/course.dart';
 
 /// YouTube 플레이어 화면
 ///
@@ -11,11 +12,13 @@ import '../theme/app_theme.dart';
 class YouTubePlayerScreen extends StatefulWidget {
   final String videoId;
   final String locationName;
+  final Course? course; // Course 객체 추가!
 
   const YouTubePlayerScreen({
     super.key,
     required this.videoId,
-    this.locationName = '성수동',
+    required this.locationName,
+    this.course,
   });
 
   @override
@@ -106,7 +109,8 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
 
                     // 설명
                     Text(
-                      '영상을 들으면서 걸어보세요.\n중요한 포인트를 하나씩 알려드릴게요.',
+                      widget.course?.description.subtitle ??
+                          '영상을 들으면서 걸어보세요.\n중요한 포인트를 하나씩 알려드릴게요.',
                       style: TextStyle(
                         fontSize: AppTheme.fontSizeBody,
                         fontWeight: FontWeight.w300,
@@ -118,16 +122,23 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
 
                     SizedBox(height: AppTheme.spacingXL),
 
-                    // 체크리스트 (나중에 동적으로)
-                    _buildChecklistItem('지하철역 거리', '성수역 도보 7분', true),
-
-                    SizedBox(height: AppTheme.spacingM),
-
-                    _buildChecklistItem('대형마트', '이마트 성수점 10분', true),
-
-                    SizedBox(height: AppTheme.spacingM),
-
-                    _buildChecklistItem('학교', '서울숲초등학교 확인 필요', false),
+                    // 체크리스트 (동적 생성!)
+                    if (widget.course != null)
+                      ...widget.course!.checklist.map(
+                        (item) => Padding(
+                          padding: EdgeInsets.only(bottom: AppTheme.spacingM),
+                          child: _buildChecklistItem(item),
+                        ),
+                      )
+                    else
+                    // Course 없으면 기본 체크리스트
+                    ...[
+                      _buildChecklistItemLegacy('지하철역 거리', '성수역 도보 7분', true),
+                      SizedBox(height: AppTheme.spacingM),
+                      _buildChecklistItemLegacy('대형마트', '이마트 성수점 10분', true),
+                      SizedBox(height: AppTheme.spacingM),
+                      _buildChecklistItemLegacy('학교', '서울숲초등학교 확인 필요', false),
+                    ],
 
                     SizedBox(height: AppTheme.spacingXL),
                   ],
@@ -140,8 +151,63 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
     );
   }
 
-  /// 체크리스트 아이템
-  Widget _buildChecklistItem(String title, String detail, bool isPassed) {
+  /// 체크리스트 아이템 (JSON에서!)
+  Widget _buildChecklistItem(ChecklistItem item) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 아이콘
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: item.isPassed ? AppTheme.primary : AppTheme.accent,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Icon(
+              item.isPassed ? Icons.check : Icons.question_mark,
+              color: AppTheme.white,
+              size: 16,
+            ),
+          ),
+        ),
+
+        SizedBox(width: AppTheme.spacingM),
+
+        // 텍스트
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.title,
+                style: TextStyle(
+                  fontSize: AppTheme.fontSizeBody,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textPrimary,
+                  fontFamily: 'GmarketSans',
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                item.result,
+                style: TextStyle(
+                  fontSize: AppTheme.fontSizeSmall,
+                  fontWeight: FontWeight.w300,
+                  color: AppTheme.textSecondary,
+                  fontFamily: 'GmarketSans',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 체크리스트 아이템 (하드코딩 - 호환용)
+  Widget _buildChecklistItemLegacy(String title, String detail, bool isPassed) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

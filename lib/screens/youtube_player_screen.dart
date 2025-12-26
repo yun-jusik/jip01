@@ -68,60 +68,73 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // YouTube 플레이어
-            YoutubePlayer(controller: _controller, aspectRatio: 16 / 9),
-
-            SizedBox(height: AppTheme.spacingL),
-
-            // 안내 텍스트
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppTheme.spacingL),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 제목
-                  Text(
-                    '전문가가 안내해드려요',
-                    style: TextStyle(
-                      fontSize: AppTheme.fontSizeTitle,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary,
-                      fontFamily: 'GmarketSans',
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // YouTube 플레이어 (최대 높이 제한)
+              Container(
+                constraints: BoxConstraints(maxHeight: 400),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: YoutubePlayer(
+                    controller: _controller,
+                    aspectRatio: 16 / 9,
                   ),
-
-                  SizedBox(height: AppTheme.spacingM),
-
-                  // 설명
-                  Text(
-                    '영상을 들으면서 걸어보세요.\n중요한 포인트를 하나씩 알려드릴게요.',
-                    style: TextStyle(
-                      fontSize: AppTheme.fontSizeBody,
-                      fontWeight: FontWeight.w300,
-                      color: AppTheme.textSecondary,
-                      fontFamily: 'GmarketSans',
-                      height: 1.5,
-                    ),
-                  ),
-
-                  SizedBox(height: AppTheme.spacingXL),
-
-                  // 체크리스트 (나중에 동적으로)
-                  _buildChecklistItem('지하철역 거리', '성수역 도보 7분', true),
-
-                  SizedBox(height: AppTheme.spacingM),
-
-                  _buildChecklistItem('대형마트', '이마트 성수점 10분', true),
-
-                  SizedBox(height: AppTheme.spacingM),
-
-                  _buildChecklistItem('학교', '서울숲초등학교 확인 필요', false),
-                ],
+                ),
               ),
-            ),
-          ],
+
+              SizedBox(height: AppTheme.spacingL),
+
+              // 안내 텍스트
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: AppTheme.spacingL),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 제목
+                    Text(
+                      '전문가가 안내해드려요',
+                      style: TextStyle(
+                        fontSize: AppTheme.fontSizeTitle,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textPrimary,
+                        fontFamily: 'GmarketSans',
+                      ),
+                    ),
+
+                    SizedBox(height: AppTheme.spacingM),
+
+                    // 설명
+                    Text(
+                      '영상을 들으면서 걸어보세요.\n중요한 포인트를 하나씩 알려드릴게요.',
+                      style: TextStyle(
+                        fontSize: AppTheme.fontSizeBody,
+                        fontWeight: FontWeight.w300,
+                        color: AppTheme.textSecondary,
+                        fontFamily: 'GmarketSans',
+                        height: 1.5,
+                      ),
+                    ),
+
+                    SizedBox(height: AppTheme.spacingXL),
+
+                    // 체크리스트 (나중에 동적으로)
+                    _buildChecklistItem('지하철역 거리', '성수역 도보 7분', true),
+
+                    SizedBox(height: AppTheme.spacingM),
+
+                    _buildChecklistItem('대형마트', '이마트 성수점 10분', true),
+
+                    SizedBox(height: AppTheme.spacingM),
+
+                    _buildChecklistItem('학교', '서울숲초등학교 확인 필요', false),
+
+                    SizedBox(height: AppTheme.spacingXL),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

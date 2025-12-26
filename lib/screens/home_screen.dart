@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => YouTubePlayerScreen(
-                      videoId: 'dQw4w9WgXcQ', // 테스트용 영상 ID
+                      videoId: 'hNHiVGzbcaI', // 성수동 영상!
                       locationName: '성수동',
                     ),
                   ),
